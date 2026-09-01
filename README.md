@@ -15,7 +15,8 @@ earlier work.
 ## Demo
 
 - 🎥 **Video walkthrough:** _[add link after uploading — see "Adding the demo video" below]_
-- 📊 **Slide deck (original problem framing / EDA):** [`legacy_v1/PPT.pdf`](legacy_v1/PPT.pdf)
+- 📊 **Slide deck (original problem framing / EDA):**
+[PPT.pdf](https://github.com/user-attachments/files/31675628/PPT.pdf)
 
 <details>
 <summary>Adding the demo video (click to expand)</summary>
