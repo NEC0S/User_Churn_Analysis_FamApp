@@ -1,0 +1,99 @@
+# =============================================================================
+# Central configuration for the churn-prediction project.
+# Nothing in src/ should hardcode a path, threshold, or hyperparameter --
+# everything tunable lives here so dev/staging/prod can each ship their own
+# config.yaml without touching code.
+# =============================================================================
+
+data:
+  raw_users_path: "data/raw/fam_users.csv"
+  raw_transactions_path: "data/raw/fam_transactions.csv"
+  processed_dir: "data/processed"
+
+split:
+  test_size: 0.2          # final, untouched holdout
+  val_size: 0.2           # taken out of the remaining train portion, used for tuning/threshold selection
+  random_state: 42
+  stratify_col: "is_active"
+
+target:
+  column: "is_active"
+  positive_label: 0        # 0 = churned in this dataset -- being explicit here avoids silent sign-flip bugs
+
+# Columns that are only useful for EDA / joins / leakage and must never enter
+# the model matrix. Anything derived directly from "when did the user last
+# transact relative to *today*" is target leakage for a churn label.
+leakage_columns:
+  - "days_since_last_transaction_x"
+  - "days_since_last_transaction_y"
+  - "days_since_last_transaction"
+  - "registration_date"
+  - "last_transaction_date"
+  - "first_transaction_date"
+
+id_columns:
+  - "user_id"
+
+numeric_features:
+  - "days_since_registration"
+  - "app_opens_per_week"
+  - "avg_session_duration"
+  - "support_tickets"
+  - "referrals_made"
+  - "has_customized_card"
+  - "has_set_savings_goal"
+  - "has_used_offers"
+  - "total_transactions"
+  - "total_amount"
+  - "avg_amount"
+  - "max_amount"
+  - "min_amount"
+  - "active_days"
+  - "unique_merchants"
+  - "transaction_failure_rate"
+  - "days_between_first_and_last_txn"
+
+categorical_features:
+  - "age_group"
+  - "device_type"
+  - "city"
+  - "most_common_payment_method"
+  - "most_common_transaction_type"
+
+model:
+  algorithm: "xgboost"     # xgboost | random_forest | logistic_regression
+  use_smote: true
+  decision_threshold: 0.4  # tuned on the validation split, applied at inference -- see notebook 04
+  xgboost_params:
+    n_estimators: 300
+    max_depth: 5
+    learning_rate: 0.05
+    subsample: 0.8
+    colsample_bytree: 0.8
+    gamma: 1
+    min_child_weight: 5
+    reg_alpha: 0.1
+    reg_lambda: 1
+    eval_metric: "logloss"
+    random_state: 42
+    n_jobs: -1
+
+hyperparameter_search:
+  enabled: true
+  n_iter: 25
+  cv_folds: 5
+  scoring: "recall"          # recall on the churn class -- business wants to catch churners
+  random_state: 42
+
+artifacts:
+  pipeline_path: "saved_models/churn_pipeline.joblib"
+  metrics_path: "artifacts/metrics.json"
+  feature_importance_path: "artifacts/feature_importance.csv"
+
+risk_bands:
+  high: 0.7
+  medium: 0.3
+
+logging:
+  level: "INFO"
+  log_file: "artifacts/pipeline.log"

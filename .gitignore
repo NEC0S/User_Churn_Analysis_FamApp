@@ -19,3 +19,7 @@ data/
 *.log
 
 .vscode/
+data/raw/*.csv
+saved_models/*.joblib
+__pycache__/
+.pytest_cache/
