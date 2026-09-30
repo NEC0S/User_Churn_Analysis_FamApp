@@ -8,7 +8,7 @@ This repo intentionally keeps **both versions** of the project side by side —
 the original notebooks in [`legacy_v1/`](legacy_v1/), and the rebuilt version
 at the repo root — because the most useful part of this project isn't the
 model, it's the audit: finding and fixing real methodology bugs in my own
-earlier work..
+earlier work.
 
 ---
 
