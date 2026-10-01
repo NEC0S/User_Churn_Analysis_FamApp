@@ -1,31 +1,29 @@
-# Production image for the churn-scoring FastAPI service.
-# Build:  docker build -t churn-service .
-# Run:    docker run -p 8000:8000 churn-service
+# ---- Stage 1: build the React frontend ----
+FROM node:20-alpine AS frontend-build
+WORKDIR /app/frontend
+COPY frontend/package*.json ./
+RUN npm ci
+COPY frontend/ ./
+# Empty VITE_API_URL => frontend calls same-origin relative paths (/predict, /health),
+# since backend + frontend share one origin/port once deployed together.
+ARG VITE_API_URL=""
+ENV VITE_API_URL=${VITE_API_URL}
+RUN npm run build
 
-FROM python:3.11-slim
-
+# ---- Stage 2: Python backend, also serving the built frontend ----
+FROM python:3.11-slim AS final
 WORKDIR /app
 
-# Install dependencies first (separate layer) so code changes don't bust the
-# dependency-install cache on every rebuild.
-COPY requirements.txt .
+# lightgbm's wheel needs libgomp at runtime; python:3.11-slim doesn't ship it.
+RUN apt-get update && apt-get install -y --no-install-recommends libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code and the trained model artifact.
-# In a real pipeline, the model artifact would be pulled from a model
-# registry (MLflow, S3) at build or startup time rather than baked into the
-# image -- baking it in here for simplicity of a single deployable image.
-COPY src/ src/
-COPY api/ api/
-COPY config/ config/
-COPY saved_models/ saved_models/
+COPY backend/ .
+COPY --from=frontend-build /app/frontend/dist ./static
 
-# Run as a non-root user -- standard production hardening.
-RUN useradd --create-home appuser
-USER appuser
-
+ENV PORT=8000
 EXPOSE 8000
-
-HEALTHCHECK --interval=30s --timeout=3s CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" || exit 1
-
-CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT}"]

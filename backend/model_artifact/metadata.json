@@ -1,0 +1,76 @@
+{
+  "model_name": "lightgbm",
+  "feature_columns": [
+    "age_group",
+    "city",
+    "device_type",
+    "tenure_days_at_cutoff",
+    "has_customized_card",
+    "has_set_savings_goal",
+    "has_used_offers",
+    "app_opens_per_week",
+    "avg_session_duration",
+    "support_tickets",
+    "referrals_made",
+    "txn_count",
+    "total_amount",
+    "avg_amount",
+    "std_amount",
+    "n_merchants",
+    "n_payment_methods",
+    "n_txn_types",
+    "days_since_last_txn",
+    "active_span_days",
+    "failure_rate",
+    "txn_count_early",
+    "txn_count_late",
+    "txn_trend",
+    "top_txn_type"
+  ],
+  "categorical_columns": [
+    "age_group",
+    "city",
+    "device_type",
+    "top_txn_type"
+  ],
+  "numeric_columns": [
+    "tenure_days_at_cutoff",
+    "has_customized_card",
+    "has_set_savings_goal",
+    "has_used_offers",
+    "app_opens_per_week",
+    "avg_session_duration",
+    "support_tickets",
+    "referrals_made",
+    "txn_count",
+    "total_amount",
+    "avg_amount",
+    "std_amount",
+    "n_merchants",
+    "n_payment_methods",
+    "n_txn_types",
+    "days_since_last_txn",
+    "active_span_days",
+    "failure_rate",
+    "txn_count_early",
+    "txn_count_late",
+    "txn_trend"
+  ],
+  "decision_threshold": 0.771950397919377,
+  "feature_window": [
+    "2025-04-19",
+    "2025-05-08"
+  ],
+  "label_window": [
+    "2025-05-09",
+    "2025-05-19"
+  ],
+  "label_definition": "churn=1 if zero transactions in label window, else 0",
+  "excluded_leakage_columns": [
+    "is_active",
+    "days_since_last_transaction",
+    "days_since_registration (raw)"
+  ],
+  "test_roc_auc": 0.9655,
+  "test_pr_auc": 0.8891
+}

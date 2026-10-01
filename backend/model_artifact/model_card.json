@@ -1,0 +1,112 @@
+{
+  "model_id": "fam_churn_v1",
+  "champion_model": "xgboost_tuned",
+  "training_run_date": "2026-09-27",
+  "feature_window": [
+    "2025-04-19",
+    "2025-05-08"
+  ],
+  "label_window": [
+    "2025-05-08",
+    "2025-05-19"
+  ],
+  "label_definition": "churn=1 if zero transactions in label window, else 0",
+  "feature_columns": [
+    "age_group",
+    "city",
+    "device_type",
+    "tenure_days_at_cutoff",
+    "has_customized_card",
+    "has_set_savings_goal",
+    "has_used_offers",
+    "app_opens_per_week",
+    "avg_session_duration",
+    "support_tickets",
+    "referrals_made",
+    "txn_count",
+    "total_amount",
+    "avg_amount",
+    "std_amount",
+    "n_merchants",
+    "n_payment_methods",
+    "n_txn_types",
+    "days_since_last_txn",
+    "active_span_days",
+    "failure_rate",
+    "txn_count_early",
+    "txn_count_late",
+    "txn_trend",
+    "top_txn_type"
+  ],
+  "categorical_columns": [
+    "age_group",
+    "city",
+    "device_type",
+    "top_txn_type"
+  ],
+  "numeric_columns": [
+    "tenure_days_at_cutoff",
+    "has_customized_card",
+    "has_set_savings_goal",
+    "has_used_offers",
+    "app_opens_per_week",
+    "avg_session_duration",
+    "support_tickets",
+    "referrals_made",
+    "txn_count",
+    "total_amount",
+    "avg_amount",
+    "std_amount",
+    "n_merchants",
+    "n_payment_methods",
+    "n_txn_types",
+    "days_since_last_txn",
+    "active_span_days",
+    "failure_rate",
+    "txn_count_early",
+    "txn_count_late",
+    "txn_trend"
+  ],
+  "excluded_leakage_columns": [
+    "is_active",
+    "days_since_last_transaction",
+    "days_since_registration (raw)"
+  ],
+  "medium_risk_columns_unknown_computation_window": [
+    "app_opens_per_week",
+    "avg_session_duration",
+    "support_tickets",
+    "referrals_made"
+  ],
+  "class_imbalance_handling": "class weighting (scale_pos_weight), not synthetic oversampling",
+  "hyperparameter_tuning": {
+    "method": "Optuna TPE sampler",
+    "n_trials": 15,
+    "tuned_models": [
+      "lightgbm",
+      "xgboost"
+    ],
+    "catboost_note": "fixed hyperparameters, not tuned (runtime cost)"
+  },
+  "validation_strategy": "stratified train/val/test (60/20/20); 5-fold CV stability check on train+val",
+  "cv_pr_auc_mean": 0.886842365696571,
+  "cv_pr_auc_std": 0.0019964062952043306,
+  "test_pr_auc": 0.8903562407017814,
+  "test_roc_auc": 0.965499752708012,
+  "test_brier_score": 0.06353633105754852,
+  "deployment_threshold": 0.61,
+  "threshold_method": "cost-based expected value",
+  "business_assumptions": {
+    "avg_customer_value_inr": 2000,
+    "campaign_cost_inr": 150,
+    "campaign_save_rate": 0.25,
+    "note": "PLACEHOLDER figures -- replace with real finance/marketing numbers before production use"
+  },
+  "known_limitations": [
+    "Trained on a single calendar month (one feature/label window pair) -- no multi-period out-of-time validation exists yet; train/test split is random-by-user, not by time.",
+    "Medium-risk engagement columns have unknown computation windows -- verify with data-owning team before trusting their contribution.",
+    "Calibration should be re-checked against the reliability curve above before relying on raw probabilities for further financial modeling beyond the threshold decision itself.",
+    "CatBoost candidate not hyperparameter-tuned in this run."
+  ],
+  "next_retrain_trigger": "When a second month of transaction data is available, OR if any monitored feature PSI > 0.25, OR on a monthly schedule -- whichever comes first."
+}

@@ -1,25 +1,13 @@
-# Python
+.venv/
 __pycache__/
 *.pyc
-*.pyo
-
-# Jupyter Notebook checkpoints
+catboost_info/
 .ipynb_checkpoints/
+*.DS_Store
 
-# Virtual env
-env/
-venv/
-
-# Data
+frontend/node_modules/
+frontend/dist/
+notebooks/data/
 data/
-*.csv
-*.parquet
-
-# Logs
-*.log
-
-.vscode/
-data/raw/*.csv
-saved_models/*.joblib
+.venv/
 __pycache__/
-.pytest_cache/
