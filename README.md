@@ -1,5 +1,7 @@
 # FAM App — User Churn Prediction (Version 2)
 
+[![Live Demo](https://img.shields.io/badge/live%20demo-ChurnLens-success?logo=render&logoColor=white)](https://churnlens-s865.onrender.com/)
+[![Slides](https://img.shields.io/badge/slides-PPT-d24726?logo=microsoftpowerpoint&logoColor=white)](<YOUR_PPT_URL>)
 ![Python](https://img.shields.io/badge/python-3.9%2B-blue)
 ![Notebook](https://img.shields.io/badge/notebook-Jupyter-orange)
 ![Models](https://img.shields.io/badge/models-LightGBM%20%7C%20XGBoost%20%7C%20CatBoost-green)
@@ -12,8 +14,53 @@ Version 2 takes the earlier, simpler churn notebook and turns it into a **produc
 
 ---
 
+## Live demo and video
+
+| | Link |
+|---|---|
+| **Live app (production)** | [churnlens-s865.onrender.com](https://churnlens-s865.onrender.com/) |
+| **Video demo** | [Watch the walkthrough](<YOUR_VIDEO_URL>) |
+| **Presentation (PPT)** | [View the slides](<YOUR_PPT_URL>) |
+| **Source code** | `<your-repo-url>` |
+| **Model card** | [`model_artifact/model_card.json`](model_artifact/model_card.json) |
+
+> If the app has been idle, the first page load can take a little while to wake up; later requests are fast.
+
+### Video demo
+
+<!-- OPTION A (recommended): YouTube / Loom link shown as a clickable thumbnail.
+     Replace VIDEO_ID with your YouTube video ID. -->
+[![ChurnLens demo video](https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=VIDEO_ID)
+
+<!-- OPTION B: upload an .mp4 (under 100 MB) by dragging it into this README in GitHub's web editor.
+     GitHub gives you a URL like https://github.com/user-attachments/assets/... - paste it on its own line
+     and it renders as an inline video player. -->
+
+<!-- OPTION C: an animated GIF stored in the repo:
+     ![Demo](docs/demo.gif) -->
+
+**Suggested 2-3 minute demo script**
+
+1. Open the live app and state the problem: *which users will go silent in the next days?*
+2. Show how a user (or a batch) is scored and the resulting churn probability.
+3. Show the risk flag and the top reasons behind it.
+4. Close with where the model, features and threshold come from (this README, `model_card.json`).
+
+### Presentation (PPT)
+
+[View the slides](<YOUR_PPT_URL>)
+
+<!-- How to get <YOUR_PPT_URL>:
+     - Google Slides: Share > General access > "Anyone with the link" > Copy link
+     - OneDrive / SharePoint: Share > "Anyone with the link can view" > Copy link
+     - In the repo: commit the file as docs/ChurnLens.pptx and use the relative link
+       [View the slides](docs/ChurnLens.pptx)  (GitHub offers it as a download; it does not preview .pptx) -->
+
+---
+
 ## Table of contents
 
+0. [Live demo and video](#live-demo-and-video)
 1. [What problem are we solving?](#1-what-problem-are-we-solving)
 2. [Key results at a glance](#2-key-results-at-a-glance)
 3. [How it works (the big idea)](#3-how-it-works-the-big-idea)
